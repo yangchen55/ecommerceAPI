@@ -16,7 +16,7 @@ const AdminSchema = new mongoose.Schema({
         default: ""
 
     },
-    isEmailVerfified: {
+    isEmailVerified: {
         type: Boolean,
         default: false,
     },

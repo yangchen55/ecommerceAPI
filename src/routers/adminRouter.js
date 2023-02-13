@@ -1,66 +1,95 @@
-import express from 'express'
-import { newAdminValidation } from '../middlewares/joiMiddleware.js';
-import { createNewAdmin } from '../models/admin/adminModel.js';
-import { hashPassword } from '../util/bcrypt.js';
-import { v4 as uuidv4 } from 'uuid';
-import { newAccountEmailVerificationEmail } from '../util/nodemailer.js';
-const router = express.Router()
+import express from "express";
+import {
+    emailVerificationValidation,
+    newAdminValidation,
+} from "../middlewares/joiMiddleware.js";
+import { createNewAdmin, updateAdmin } from "../models/admin/AdminModel.js";
+import { hashPassword } from "../util/bcrypt.js";
+const router = express.Router();
+import { v4 as uuidv4 } from "uuid";
+import {
+    emailVerifiedNotification,
+    newAccountEmailVerificationEmail,
+} from "../util/nodemailer.js";
 
-
-//user registration
-router.post("/", async (req, res, next) => {
+//admin user loging
+router.post("/", (req, res, next) => {
     try {
         res.json({
             status: "success",
-            message: "todo login"
+            message: "todo login",
         });
     } catch (error) {
-        next(error)
+        next(error);
     }
-}
-)
-
+});
 
 // admin user registration
 router.post("/register", newAdminValidation, async (req, res, next) => {
     try {
-        console.log(req.body)
-        req.body.password = hashPassword(req.body.password)
-        // whta is ethis 
-        req.body.emailVerficationCode = uuidv4();
-        const result = await createNewAdmin(req.body)
-
-
+        req.body.password = hashPassword(req.body.password);
+        req.body.emailVerificationCode = uuidv4();
+        const result = await createNewAdmin(req.body);
         if (result?._id) {
-            const uniqueLink = `http://localhost:3000/verify?c=${result.emailVerficationCode}&email =${result.email
-                }`
-            newAccountEmailVerificationEmail(uniqueLink, result)
+            const uniqueLink = `${process.env.FRONTEND_ROOT_URL}/verify?c=${result.emailVerificationCode}&email=${result.email}`;
+            newAccountEmailVerificationEmail(uniqueLink, result);
 
             res.json({
                 status: "success",
-                message: "new user registerred"
-            })
+                message:
+                    `"We have send 
+                    a verification email. Please check your email, inclucing junk folder, and follow the instruction to verify your account.", <a href="${uniqueLink}">click here</a>`,
+            });
 
             return;
-
         }
-
 
         res.json({
-            status: "error kkk",
-            message: "unable to "
-        })
-
+            status: "error",
+            message: "Error, Unable to create a new user has been registered",
+        });
     } catch (error) {
-        if (error.message.includes("E11000 duplicate")) {
-            error.message = "email already registered";
-            error.errorCode = 200
+        if (error.message.includes("E11000 duplicate key error collection")) {
+            error.message =
+                "There is already account exist associated with this email";
+            error.errorCode = 200;
         }
-        next(error)
-
+        next(error);
     }
-}
+});
 
-)
+// admin user email verification
+router.post("/verify", emailVerificationValidation, async (req, res, next) => {
+    try {
+        // chek if the combination of email and code exist in db if so set the status active and code to "" in the db, also update is email verified to true
 
-export default router
+        const obj = {
+            status: "active",
+            isEmailVerified: true,
+            emailVerificationCode: "",
+        };
+
+        const user = await updateAdmin(req.body, obj);
+
+        if (user?._id) {
+            //send email notification
+            emailVerifiedNotification(user);
+
+            res.json({
+                status: "success",
+                message: "Your account has been verified. You may login now",
+            });
+
+            return;
+        }
+
+        res.json({
+            status: "error",
+            message: "The link is invalid or expired.",
+        });
+    } catch (error) {
+        next(error);
+    }
+});
+
+export default router;
