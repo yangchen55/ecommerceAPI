@@ -10,7 +10,20 @@ Content-Type: application/json
 "email": "tseyang98611@gmail.com",
 "fname": "tsering",
 "lname": "lama",
-"password": "1234",
+"password": "1234"
 
 
 }
+
+
+### login
+POST {{url}}/admin/login
+Content-Type: application/json
+
+{
+"email": "tseyang9861@gmail.com",
+"password": "1234"
+
+
+}
+

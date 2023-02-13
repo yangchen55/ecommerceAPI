@@ -1,10 +1,11 @@
 import express from "express";
 import {
     emailVerificationValidation,
+    loginValidation,
     newAdminValidation,
 } from "../middlewares/joiMiddleware.js";
-import { createNewAdmin, updateAdmin } from "../models/admin/AdminModel.js";
-import { hashPassword } from "../util/bcrypt.js";
+import { createNewAdmin, findUser, updateAdmin } from "../models/admin/AdminModel.js";
+import { comparePassword, hashPassword } from "../util/bcrypt.js";
 const router = express.Router();
 import { v4 as uuidv4 } from "uuid";
 import {
@@ -13,12 +14,40 @@ import {
 } from "../util/nodemailer.js";
 
 //admin user loging
-router.post("/", (req, res, next) => {
+router.post("/login", loginValidation, async (req, res, next) => {
     try {
+        const { email, password } = req.body
+
+
+        // find user by email 
+        const user = await findUser({ email })
+        if (user?._id) {
+            const isPassMatch = await comparePassword(password, user.password)
+            if (isPassMatch) {
+                user.password = undefined;
+                user.__v = undefined;
+                res.json({
+                    status: "success",
+                    message: " loginsuccssfully",
+                    user,
+                });
+                return
+
+
+            }
+
+
+
+
+        }
         res.json({
-            status: "success",
-            message: "todo login",
+            status: "error",
+            message: "illegal login",
         });
+
+        // check if plain password and hashPassword match 
+        // login successfull 
+
     } catch (error) {
         next(error);
     }
@@ -91,5 +120,9 @@ router.post("/verify", emailVerificationValidation, async (req, res, next) => {
         next(error);
     }
 });
+
+
+
+
 
 export default router;
