@@ -28,7 +28,7 @@ router.post("/login", loginValidation, async (req, res, next) => {
                 user.__v = undefined;
                 res.json({
                     status: "success",
-                    message: " loginsuccssfully",
+                    message: " login  successfully",
                     user,
                 });
                 return
