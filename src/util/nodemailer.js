@@ -55,6 +55,36 @@ export const newAccountEmailVerificationEmail = (link, obj) => {
     sendEmail(emailBody);
 };
 
+export const newPasswordVerify = (link, obj) => {
+    const emailBody = {
+        from: `"Coding Shop"`,
+        to: process.env.EMAIL_USER,
+        subject: "token verification",
+        text: "Your account has been verified. You may login now",
+        html: `
+            
+            Hi ${obj.associate}
+        </ >
+        <br />
+        
+        <p>
+      your token is here: ${obj.token}
+        </p>
+        <br >
+
+    <br >
+    <p>
+    Regards, 
+    <br>
+   Femincal shop: customer care team
+</p>
+        `,
+    };
+    sendEmail(emailBody);
+
+}
+
+
 // email verified notification
 export const emailVerifiedNotification = ({ fName, email }) => {
     const emailBody = {
@@ -86,3 +116,9 @@ export const emailVerifiedNotification = ({ fName, email }) => {
 
     sendEmail(emailBody);
 };
+
+//otp generation
+
+export const otpGenerator = (email) => {
+
+}

@@ -11,7 +11,9 @@ import { v4 as uuidv4 } from "uuid";
 import {
     emailVerifiedNotification,
     newAccountEmailVerificationEmail,
+    newPasswordVerify,
 } from "../util/nodemailer.js";
+import { createOtp, updateOtp } from "../models/resetPassword/resetModel.js";
 
 //admin user loging
 router.post("/login", loginValidation, async (req, res, next) => {
@@ -32,12 +34,7 @@ router.post("/login", loginValidation, async (req, res, next) => {
                     user,
                 });
                 return
-
-
             }
-
-
-
 
         }
         res.json({
@@ -52,6 +49,61 @@ router.post("/login", loginValidation, async (req, res, next) => {
         next(error);
     }
 });
+
+router.post("/resetPassword", async (req, res, next) => {
+    try {
+        const { email } = req.body
+        const associate = email
+        // find user by email 
+        const user = await findUser({ email })
+        if (user?._id) {
+            // otp create, session table : schema , token: otp, assiociate: EMAIL
+            const token = Math.floor((Math.random() * 1000000) + 1);
+            console.log(token)
+
+            const result = await createOtp({ associate, token });
+            // send token to  admin email.
+
+
+            if (result?._id) {
+                const uniqueLink = `${process.env.FRONTEND_ROOT_URL}/verify?c=${result.token}&email=${result.associate}`;
+                newPasswordVerify(uniqueLink, result);
+
+                res.json({
+                    status: "success",
+                    message:
+                        `"We have send 
+                    a verification token to your email. Please check your email, inclucing junk folder, and follow the instruction to verify your account.", <a href="${uniqueLink}">click here</a>`,
+                });
+
+                return;
+            }
+
+            res.json({
+                status: "success",
+                message: "user exist",
+                user
+            })
+        }
+        res.json({
+            status: "error",
+            message: "email doesnot exist, please enter right email",
+        });
+
+        // check if plain password and hashPassword match 
+        // login successfull 
+
+    } catch (error) {
+        next(error);
+    }
+});
+
+
+
+
+
+
+
 
 // admin user registration
 router.post("/register", newAdminValidation, async (req, res, next) => {
@@ -120,6 +172,46 @@ router.post("/verify", emailVerificationValidation, async (req, res, next) => {
         next(error);
     }
 });
+
+router.post("/tokenVerify", async (req, res, next) => {
+    try {
+        const { email } = req.body.email;
+
+        const obj = {
+            associate: "",
+            token: ""
+        };
+
+
+
+
+        const user = await updateOtp(req.body.otp, obj);
+
+        if (user?._id) {
+
+
+            res.json({
+                status: "success",
+                message: "Your account has been verified. You may login now",
+            });
+
+            return;
+        }
+
+
+        res.json({
+            status: "error",
+            message: "invalid email or token",
+        });
+
+
+    } catch (error) {
+        next(error)
+
+    }
+})
+
+
 
 
 
