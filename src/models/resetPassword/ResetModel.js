@@ -8,4 +8,8 @@ export const updateOtp = (filter, obj) => {
     return ResetSchema.findOneAndUpdate(filter, obj, { new: true });
 };
 
+export const deleteOtp = (filter) => {
+    return ResetSchema.findOneAndDelete(filter);
+}
+
 

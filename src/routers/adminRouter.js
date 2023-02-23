@@ -13,7 +13,7 @@ import {
     newAccountEmailVerificationEmail,
     newPasswordVerify,
 } from "../util/nodemailer.js";
-import { createOtp, updateOtp } from "../models/resetPassword/resetModel.js";
+import { createOtp, deleteOtp, updateOtp } from "../models/resetPassword/resetModel.js";
 
 //admin user loging
 router.post("/login", loginValidation, async (req, res, next) => {
@@ -176,36 +176,47 @@ router.post("/verify", emailVerificationValidation, async (req, res, next) => {
 router.post("/tokenVerify", async (req, res, next) => {
     try {
         const { email } = req.body.email;
-
-        const obj = {
-            associate: "",
-            token: ""
-        };
+        const associate = email
+        const { token } = req.body
+        const password = req.body.newPassword
 
 
+        console.log("from token verify routter, ", email, req.body)
+        const result = await deleteOtp({ token });
+        if (result?._id) {
 
+            const user = await updateAdmin(
+                { email },
+                { password: hashPassword(password) }
+            );
 
-        const user = await updateOtp(req.body.otp, obj);
+            if (user?._id) {
+                //send email notification
+                // passwordUpdateNotification(user);
 
-        if (user?._id) {
-
-
-            res.json({
-                status: "success",
-                message: "Your account has been verified. You may login now",
-            });
-
-            return;
+                return res.json({
+                    status: "success",
+                    message: "You password has been updated successfully",
+                });
+            }
         }
-
-
         res.json({
             status: "error",
-            message: "invalid email or token",
+            message: "Unable to update your password. Invalid or expired token",
         });
 
 
-    } catch (error) {
+
+
+    }
+
+
+
+
+
+
+
+    catch (error) {
         next(error)
 
     }
