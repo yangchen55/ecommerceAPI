@@ -1,60 +1,49 @@
 import mongoose from "mongoose";
 
-const AdminSchema = new mongoose.Schema({
+const adminSchema = new mongoose.Schema(
+  {
     status: {
-        type: String,
-        default: "inactive"
-
+      type: String,
+      default: "inactive",
     },
     address: {
-        type: String,
-        default: ""
+      type: String,
+      default: "",
+    },
 
-    },
-    emailVerficationCode: {
-        type: String,
-        default: ""
-
-    },
-    isEmailVerified: {
-        type: Boolean,
-        default: false,
-    },
-    confirmPassword: {
-        type: String,
-        default: ""
-
-    },
     email: {
-        type: String,
-        required: true,
-        unique: true,
-        index: 1
+      type: String,
+      required: true,
+      unique: true,
+      index: 1,
     },
-    fname: {
-        type: String,
-        required: true,
-
+    fName: {
+      type: String,
+      required: true,
     },
-    lname: {
-        type: String,
-        required: true,
-        default: "",
+    lName: {
+      type: String,
+      required: true,
     },
     password: {
-        type: String,
-        required: true,
-        default: "",
+      type: String,
+      required: true,
     },
-    phoneno:
-    {
-        type: String,
-        default: "",
+    phone: {
+      type: String,
+      default: "",
     },
+    isEmailVerified: {
+      type: Boolean,
+      default: false,
+    },
+    emailVerificationCode: {
+      type: String,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
 
-},
-    {
-        timestamps: true
-    })
-
-export default mongoose.model("Admin_user", AdminSchema)
+export default mongoose.model("Admin_user", adminSchema);

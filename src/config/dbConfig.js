@@ -1,16 +1,14 @@
 import mongoose from "mongoose";
+
 export const dbConnect = async () => {
-    try {
-        mongoose.set('strictQuery', true);
-        const conn = await mongoose.connect(process.env.MONGO_CLIENT)
+  try {
+    mongoose.set("strictQuery", true);
 
-        conn?.connections ? console.log("db connected") : console.log("unable to connect")
-
-    } catch (error) {
-        console.log("errpr", error)
-
-    }
-
-
-}
-
+    const con = await mongoose.connect(process.env.MONGO_CLIENT);
+    con?.connections
+      ? console.log("DB connected")
+      : console.log("unable to connect mongo");
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -1,29 +1,57 @@
-// admin ap1
+// admin api
 
-@url =  http://localhost:8000/api/v1
+@url = http://localhost:8000/api/v1
 
-POST {{url}}/admin/register
+
+# Create new admin user
+POST  {{url}}/admin/register
 Content-Type: application/json
 
 {
-"address": "b@gmail.com",
-"email": "tseyang98611@gmail.com",
-"fname": "tsering",
-"lname": "lama",
-"password": "1234"
+"address": "", 
+"email": "a@sdf.com",
+"fName":"asfasfs",
+"lName": "asdfasdfas",
+"password": "afdasDF@#24",
+"phone": null
+}
 
+
+### login user
+POST  {{url}}/admin/login
+Content-Type: application/json
+
+{
+
+"email": "b@b.com",
+"password": "123456"
 
 }
 
 
-### login
-POST {{url}}/admin/login
+##========== category api
+
+### create new api
+Get  {{url}}/category
+
+
+### create new api
+POST   {{url}}/category
 Content-Type: application/json
 
 {
-"email": "tseyang9861@gmail.com",
-"password": "1234"
-
-
+"name": "Large Monitor"
 }
 
+### get categorie(s)
+PUT  {{url}}/category
+Content-Type: application/json
+
+{
+"_id": "63f40b41cdc8e9f473f4d4ee",
+ "status": "active",
+"name": "Computers"
+}
+
+### create new api
+DELETE   {{url}}/category/63f40c86da340dbe5af4afb1
