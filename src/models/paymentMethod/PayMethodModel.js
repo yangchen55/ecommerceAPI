@@ -2,8 +2,6 @@ import PayMethodSchema from "./PayMethodSchema.js"
 
 export const createNewPayMethod = (obj) => {
     return PayMethodSchema(obj).save();
-
-
 }
 
 export const readPayment = (filter) => {

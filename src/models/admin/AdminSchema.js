@@ -29,10 +29,12 @@ const adminSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+
     phone: {
       type: String,
       default: "",
     },
+
     isEmailVerified: {
       type: Boolean,
       default: false,
