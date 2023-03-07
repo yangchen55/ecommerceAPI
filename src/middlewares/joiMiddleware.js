@@ -7,9 +7,9 @@ const joiValidation = (schema, req, res, next) => {
 
     error
       ? res.json({
-        status: "error",
-        message: error.message,
-      })
+          status: "error",
+          message: error.message,
+        })
       : next();
   } catch (error) {
     next(error);
@@ -67,6 +67,28 @@ export const updatCatValidation = (req, res, next) => {
     _id: Joi.string().required(),
     name: Joi.string().required(),
     status: Joi.string().required(),
+  });
+
+  joiValidation(schema, req, res, next);
+};
+
+// ================category validation
+
+export const newPMValidation = (req, res, next) => {
+  const schema = Joi.object({
+    name: Joi.string().required(),
+    description: Joi.string().required(),
+  });
+
+  joiValidation(schema, req, res, next);
+};
+
+export const updatePMValidation = (req, res, next) => {
+  const schema = Joi.object({
+    _id: Joi.string().required(),
+    status: Joi.string().required(),
+    name: Joi.string().required(),
+    description: Joi.string().required(),
   });
 
   joiValidation(schema, req, res, next);

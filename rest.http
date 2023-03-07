@@ -55,3 +55,25 @@ Content-Type: application/json
 
 ### create new api
 DELETE   {{url}}/category/63f40c86da340dbe5af4afb1
+
+
+
+
+##========== payment methods api
+
+### create new api
+GET    {{url}}/payment-method
+  
+
+
+### create new api
+POST   {{url}}/payment-method
+Content-Type: application/json
+
+{
+"name": "Bank tranfer",
+"description": "please eft to the BSB:234-533 Account: 1234567"
+}
+
+### create new api
+DELETE {{url}}/payment-method/64053630ba177b326acb5d49

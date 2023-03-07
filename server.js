@@ -20,13 +20,11 @@ app.use(morgan("dev"));
 // API routers
 import adminRouter from "./src/routers/adminRouter.js";
 import categoryRouter from "./src/routers/categoryRouter.js";
-import paymentRouter from "./src/routers/payMethodRouter.js";
-
+import pmRouter from "./src/routers/pmRouter.js";
 
 app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/category", categoryRouter);
-app.use("/api/v1/paymentMethod", paymentRouter);
-
+app.use("/api/v1/payment-method", pmRouter);
 
 //root url request
 app.use("/", (req, res, next) => {
@@ -36,7 +34,7 @@ app.use("/", (req, res, next) => {
   next(error);
 });
 
-//global error handler{}
+//global error handler
 app.use((error, req, res, next) => {
   console.log(error);
   const statusCode = error.errorCode || 404;
