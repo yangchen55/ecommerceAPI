@@ -40,6 +40,9 @@ const adminSchema = new mongoose.Schema(
     emailVerificationCode: {
       type: String,
     },
+    refreshJWT: {
+      type: String
+    }
   },
   {
     timestamps: true,

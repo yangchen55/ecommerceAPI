@@ -24,6 +24,8 @@ import {
   createNewSession,
   deleteSession,
 } from "../models/session/SessionModel.js";
+import { signAccessJWT, signRefreshJWT } from "../utils/jwt.js";
+import { isAuth } from "../middlewares/authMiddleware.js";
 
 //admin user loging
 router.post("/login", loginValidation, async (req, res, next) => {
@@ -48,13 +50,20 @@ router.post("/login", loginValidation, async (req, res, next) => {
 
       //login successfull or invalid login details
       if (isPassMatch) {
+
         user.password = undefined;
         user.__v = undefined;
         res.json({
           status: "success",
           message: "Login success fully",
           user,
+          tokens: {
+            accessJWT: await signAccessJWT({ email }),
+            refreshJWT: await signAccessJWT({ email })
+
+          }
         });
+
 
         return;
       }
@@ -217,5 +226,23 @@ router.patch("/reset-password", passResetValidation, async (req, res, next) => {
     next(error);
   }
 });
+
+router.get("/user-profile", isAuth, (req, res, next) => {
+  try {
+    const user = req.userInfo
+    user.password = undefined
+    res.json({
+      status: "success",
+      message: "user found",
+      user,
+    })
+
+  } catch (error) {
+    next(error)
+
+  }
+
+
+})
 
 export default router;
