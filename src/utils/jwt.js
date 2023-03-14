@@ -1,39 +1,58 @@
-import jwt from "jsonwebtoken"
-
+import jwt from "jsonwebtoken";
 import { updateAdmin } from "../models/admin/AdminModel.js";
-import { createNewSession } from "../models/session/SessionModel.js"
+import { createNewSession } from "../models/session/SessionModel.js";
 
-export const signAccessJWT = async (payload) => {
-    // Sign the payload with the secret key and set an expiration time of 30 minutes
-    const access_jwt = jwt.sign(payload, process.env.JWT_ACCESS, { expiresIn: "15m" })
+export const singAccessJWT = async (paylodad) => {
+  const accessJWT = jwt.sign(paylodad, process.env.JWT_ACCESS, {
+    expiresIn: "1m",
+  });
 
-    await createNewSession({
-        associate: payload.email,
-        token: access_jwt
-    })
+  //store the key
 
+  await createNewSession({
+    associate: paylodad.email,
+    token: accessJWT,
+  });
 
-    // Return the signed access JWT
-    return access_jwt
+  return accessJWT;
 };
-export const verifyAccessJWT = (token) => {
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_ACCESS);
-        return decoded
 
-    } catch (error) {
-        return error.message.includes("jwt expired") ?
-            "jwt expired"
-            : error.message;
-    }
-}
+export const verifyAccessJWT = (tokne) => {
+  try {
+    const decoded = jwt.verify(tokne, process.env.JWT_ACCESS);
 
+    return decoded;
+  } catch (error) {
+    return error.message.includes("jwt expired")
+      ? "jwt expired"
+      : error.message;
+  }
+};
 
-export const signRefreshJWT = async (payload) => {
-    const refresh_jwt = jwt.sign(payload, process.env.JWT_REFRESH, { expiresIn: "30d" });
-    await updateAdmin({ email: payload.email }, { refresh_jwt })
+// ===== refress
 
-    return refresh_jwt
+export const singRefreshJWT = async (paylodad) => {
+  const refreshJWT = jwt.sign(paylodad, process.env.JWT_REFRESH, {
+    expiresIn: "30d",
+  });
 
+  //store the key
+  await updateAdmin(
+    {
+      email: paylodad.email,
+    },
+    { refreshJWT }
+  );
 
-}
+  return refreshJWT;
+};
+
+export const verifyRefreshJWT = (tokne) => {
+  try {
+    const decoded = jwt.verify(tokne, process.env.JWT_REFRESH);
+
+    return decoded;
+  } catch (error) {
+    return "logout";
+  }
+};

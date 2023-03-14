@@ -15,12 +15,6 @@ const sessionSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-
-    refreshJwt: {
-      type: String,
-      default: "",
-
-    }
   },
   {
     timestamps: true,

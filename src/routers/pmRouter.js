@@ -14,16 +14,15 @@ import {
 router.post("/", newPMValidation, async (req, res, next) => {
   try {
     const { _id } = await createNewPaymentMetnod(req.body);
-
     _id
       ? res.json({
-          status: "success",
-          message: "Payment method has been added",
-        })
+        status: "success",
+        message: "Payment method has been added",
+      })
       : res.json({
-          status: "error",
-          message: "Error!, unable to add payment method, pleas try agin later",
-        });
+        status: "error",
+        message: "Error!, unable to add payment method, pleas try agin later",
+      });
   } catch (error) {
     next(error);
   }
@@ -32,6 +31,7 @@ router.post("/", newPMValidation, async (req, res, next) => {
 router.get("/", async (req, res, next) => {
   try {
     const result = await readPaymentMetnods();
+    console.log(result)
     res.json({
       status: "success",
       message: "Payment methods list",
@@ -47,13 +47,13 @@ router.put("/", updatePMValidation, async (req, res, next) => {
     const { _id } = await updatePaymentMetnods(req.body);
     _id
       ? res.json({
-          status: "success",
-          message: "Payment method has been added",
-        })
+        status: "success",
+        message: "Payment method has been added",
+      })
       : res.json({
-          status: "error",
-          message: "Error!, unable to add payment method, pleas try agin later",
-        });
+        status: "error",
+        message: "Error!, unable to add payment method, pleas try agin later",
+      });
   } catch (error) {
     next(error);
   }

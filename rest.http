@@ -23,8 +23,8 @@ Content-Type: application/json
 
 {
 
-"email": "a@gmail.com",
-"password": "1234"
+"email": "a@a.com",
+"password": "Aa12345"
 
 }
 
@@ -33,14 +33,16 @@ Content-Type: application/json
 
 ### create new api
 Get  {{url}}/category
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFAYS5jb20iLCJpYXQiOjE2Nzg2NjQ2MDEsImV4cCI6MTY3ODY2NTUwMX0.WXqr_MVQeBj3wbyOWMBMP-qHVr0YLa7xdxiyUFUhiGA
 
 
 ### create new api
 POST   {{url}}/category
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFAYS5jb20iLCJpYXQiOjE2Nzg2NjQ2MDEsImV4cCI6MTY3ODY2NTUwMX0.WXqr_MVQeBj3wbyOWMBMP-qHVr0YLa7xdxiyUFUhiGA
 
 {
-"name": "Large Monitor"
+"name": "Large Monitor asfs  2"
 }
 
 ### get categorie(s)
@@ -54,7 +56,7 @@ Content-Type: application/json
 }
 
 ### create new api
-DELETE   {{url}}/category/63f40c86da340dbe5af4afb1
+DELETE   {{url}}/category/63f432fd4751590249cb5a7f
 
 
 
@@ -76,4 +78,4 @@ Content-Type: application/json
 }
 
 ### create new api
-DELETE {{url}}/payment-method/64053630ba177b326acb5d49
+DELETE {{url}}/payment-method/63f432fd4751590249cb5a7f

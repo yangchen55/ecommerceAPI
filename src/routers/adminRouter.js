@@ -24,7 +24,11 @@ import {
   createNewSession,
   deleteSession,
 } from "../models/session/SessionModel.js";
-import { signAccessJWT, signRefreshJWT } from "../utils/jwt.js";
+import {
+  singAccessJWT,
+  singRefreshJWT,
+  verifyRefreshJWT,
+} from "../utils/jwt.js";
 import { isAuth } from "../middlewares/authMiddleware.js";
 
 //admin user loging
@@ -50,20 +54,21 @@ router.post("/login", loginValidation, async (req, res, next) => {
 
       //login successfull or invalid login details
       if (isPassMatch) {
+        // create accessJWT, refreshJWT
+        // store accessJWT in session table
+        // store refreshJWT in in user table
+        //return tokens to the client
 
         user.password = undefined;
         user.__v = undefined;
         res.json({
           status: "success",
           message: "Login success fully",
-          user,
-          tokens: {
-            accessJWT: await signAccessJWT({ email }),
-            refreshJWT: await signAccessJWT({ email })
-
-          }
+          toknes: {
+            accessJWT: await singAccessJWT({ email }),
+            refreshJWT: await singRefreshJWT({ email }),
+          },
         });
-
 
         return;
       }
@@ -227,22 +232,52 @@ router.patch("/reset-password", passResetValidation, async (req, res, next) => {
   }
 });
 
+// reutrn user info
 router.get("/user-profile", isAuth, (req, res, next) => {
   try {
-    const user = req.userInfo
-    user.password = undefined
+    const user = req.userInfo;
+    user.password = undefined;
+
     res.json({
       status: "success",
       message: "user found",
       user,
-    })
-
+    });
   } catch (error) {
-    next(error)
-
+    next(error);
   }
+});
+// reutrn new accessJWT
+router.get("/new-accessjwt", async (req, res, next) => {
+  try {
+    const { authorization } = req.headers;
+    console.log(req.headers, "kljhgcgfhjkljgh");
 
+    const { email } = verifyRefreshJWT(authorization);
 
-})
+    if (email) {
+      const user = await findUser({ email });
+
+      if (user?.refreshJWT === authorization) {
+        // create accessJWT and return
+        const accessJWT = await singAccessJWT({ email });
+
+        if (accessJWT) {
+          return res.json({
+            status: "success",
+            accessJWT,
+          });
+        }
+      }
+    }
+
+    res.status(401).json({
+      status: "error",
+      message: "unauthenticated",
+    });
+  } catch (error) {
+    next(error);
+  }
+});
 
 export default router;

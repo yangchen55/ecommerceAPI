@@ -7,9 +7,9 @@ const joiValidation = (schema, req, res, next) => {
 
     error
       ? res.json({
-          status: "error",
-          message: error.message,
-        })
+        status: "error",
+        message: error.message,
+      })
       : next();
   } catch (error) {
     next(error);

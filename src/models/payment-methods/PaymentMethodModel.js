@@ -7,7 +7,9 @@ export const createNewPaymentMetnod = (obj) => {
 
 //Read paymentMetnods
 export const readPaymentMetnods = () => {
+
   return PaymentMethodSchema.find();
+
 };
 
 //update paymentMetnods

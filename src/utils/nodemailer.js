@@ -16,6 +16,7 @@ const sendEmail = async (emailBody) => {
 
     //send email
     const info = await transporter.sendMail(emailBody);
+
     console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
   } catch (error) {
     console.log(error);

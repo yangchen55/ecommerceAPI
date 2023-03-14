@@ -2,30 +2,65 @@ import { findUser } from "../models/admin/AdminModel.js";
 import { verifyAccessJWT } from "../utils/jwt.js";
 
 export const isAuth = async (req, res, next) => {
-    try {
-        // get jwt from header 
-        const { authorization } = req.headers;
+  try {
+    ///all the authorization code process
+    // get jwt from header
+    const { authorization } = req.headers;
 
-        const decoded = verifyAccessJWT(authorization)
-        console.log(decoded)
-        // check if validation and in debugger
-        if (decoded?.email) {
-            const user = await findUser({
-                email: decoded.email
-            });
-            if (user?._id) {
-                req.userInfo = user;
-                return next()
+    //check jwt validation and in db
+    const decoded = verifyAccessJWT(authorization);
 
-            }
-        }
+    if (decoded?.email) {
+      //check if the payload in jwt matches in our admin user
+      const user = await findUser({
+        email: decoded.email,
+      });
 
-        res.status(403).json({
-            status: "error",
-            message: "authorized"
-        })
-    } catch (error) {
-        next(error)
-
+      if (user?._id) {
+        req.userInfo = user;
+        return next();
+      }
     }
-}
+
+    // then authorize = true
+
+    res.status(403).json({
+      statu: "error",
+      message: decoded,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const isValidAccessJWT = async (req, res, next) => {
+  try {
+    ///all the authorization code process
+    // get jwt from header
+    const { authorization } = req.headers;
+
+    //check jwt validation and in db
+    const decoded = verifyAccessJWT(authorization);
+
+    if (decoded?.email) {
+      //check if the payload in jwt matches in our admin user
+      const user = await findUser({
+        email: decoded.email,
+      });
+
+      if (user?._id) {
+        req.userInfo = user;
+        return next();
+      }
+    }
+
+    // then authorize = true
+
+    res.status(403).json({
+      statu: "error",
+      message: decoded,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

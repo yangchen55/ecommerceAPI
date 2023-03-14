@@ -12,7 +12,7 @@ import { isAuth } from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
 // create category
-router.post("/", isAuth, async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   try {
     const { name } = req.body;
     if (name.length && typeof name === "string") {
@@ -49,7 +49,7 @@ router.post("/", isAuth, async (req, res, next) => {
 });
 
 // read category
-router.get("/", isAuth, async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
     const cats = await readCategories();
 
@@ -64,7 +64,7 @@ router.get("/", isAuth, async (req, res, next) => {
 });
 
 // update category
-router.put("/", isAuth, updatCatValidation, async (req, res, next) => {
+router.put("/", updatCatValidation, async (req, res, next) => {
   try {
     const result = await updateCategory(req.body);
 
@@ -85,7 +85,7 @@ router.put("/", isAuth, updatCatValidation, async (req, res, next) => {
 });
 
 // delete category
-router.delete("/:_id", isAuth, async (req, res, next) => {
+router.delete("/:_id", async (req, res, next) => {
   const { _id } = req.params;
   const result = await deleteCat(_id);
 
