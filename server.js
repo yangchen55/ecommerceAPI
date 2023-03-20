@@ -22,10 +22,12 @@ import adminRouter from "./src/routers/adminRouter.js";
 import categoryRouter from "./src/routers/categoryRouter.js";
 import pmRouter from "./src/routers/pmRouter.js";
 import { isAuth } from "./src/middlewares/authMiddleware.js";
+import productRotuer from "./src/routers/productRouter.js";
 
 app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/category", isAuth, categoryRouter);
 app.use("/api/v1/payment-method", isAuth, pmRouter);
+app.use("/api/v1/product", isAuth, productRotuer);
 
 //root url request
 app.use("/", (req, res, next) => {
