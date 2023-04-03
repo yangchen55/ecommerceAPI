@@ -8,6 +8,7 @@ import {
 import slugify from "slugify";
 import { updatCatValidation } from "../middlewares/joiMiddleware.js";
 import { isAuth } from "../middlewares/authMiddleware.js";
+import { getSelectedProduct } from "../models/product/ProductMode.js";
 
 const router = express.Router();
 
@@ -87,6 +88,19 @@ router.put("/", updatCatValidation, async (req, res, next) => {
 // delete category
 router.delete("/:_id", async (req, res, next) => {
   const { _id } = req.params;
+
+  //get all the product that as parentCat === _id
+  const prodList = await getSelectedProduct({ parentCat: _id });
+  if (prodList.length) {
+    const names = prodList.map(({ name }) => name).toString();
+    return res.json({
+      status: "error",
+      message:
+        "Pelase re assign category for the following product before you can delete this category: " +
+        names,
+    });
+  }
+
   const result = await deleteCat(_id);
 
   if (result?._id) {

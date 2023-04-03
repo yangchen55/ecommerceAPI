@@ -252,7 +252,6 @@ router.get("/user-profile", isAuth, (req, res, next) => {
 router.get("/new-accessjwt", async (req, res, next) => {
   try {
     const { authorization } = req.headers;
-    console.log(req.headers, "kljhgcgfhjkljgh");
 
     const { email } = verifyRefreshJWT(authorization);
 

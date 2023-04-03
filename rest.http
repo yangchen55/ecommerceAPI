@@ -4,7 +4,7 @@
 
 
 # Create new admin user
-POST  {{url}}/admin/register
+POST  /admin/register
 Content-Type: application/json
 
 {
@@ -18,7 +18,8 @@ Content-Type: application/json
 
 
 ### login user
-POST  {{url}}/admin/login
+POST   http://ecommerce-env.eba-fm3vjcbd.us-east-1.elasticbeanstalk.com/api/v1/admin/login
+# POST   {{url}}/admin/login
 Content-Type: application/json
 
 {
@@ -79,3 +80,12 @@ Content-Type: application/json
 
 ### create new api
 DELETE {{url}}/payment-method/63f432fd4751590249cb5a7f
+
+
+
+### get 
+get http://ecommerce-env.eba-fm3vjcbd.us-east-1.elasticbeanstalk.com/
+
+
+###
+GET  http://ecommerce-env.eba-fm3vjcbd.us-east-1.elasticbeanstalk.com/

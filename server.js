@@ -5,17 +5,22 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 const app = express();
+import path from "path";
 
 const PORT = process.env.PORT || 8000;
 
 //db connect
 import { dbConnect } from "./src/config/dbConfig.js";
 dbConnect();
+// server static files
+
+const __dirname = path.resolve();
 
 // middlewares
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
+app.use(express.static(path.join(__dirname, "/public")));
 
 // API routers
 import adminRouter from "./src/routers/adminRouter.js";
@@ -34,7 +39,7 @@ app.use("/", (req, res, next) => {
   const error = {
     message: "You dont have promission here",
   };
-  next(error);
+  res.json(error);
 });
 
 //global error handler

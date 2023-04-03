@@ -12,8 +12,15 @@ export const getSingleProduct = (filter) => {
   return ProductSchema.findOne(filter);
 };
 
+export const getSelectedProduct = (filter) => {
+  return ProductSchema.find(filter);
+};
+export const geProductById = (_id) => {
+  return ProductSchema.findById(_id);
+};
+
 export const updateProduct = (_id, obj) => {
-  return ProductSchema.findByIdAndUpdateyId(_id, obj, { new: true });
+  return ProductSchema.findByIdAndUpdate(_id, obj, { new: true });
 };
 
 export const deleteSignleProduct = (filter) => {
