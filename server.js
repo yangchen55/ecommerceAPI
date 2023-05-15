@@ -26,18 +26,22 @@ app.use(express.static(path.join(__dirname, "/public")));
 import adminRouter from "./src/routers/adminRouter.js";
 import categoryRouter from "./src/routers/categoryRouter.js";
 import pmRouter from "./src/routers/pmRouter.js";
+import orderRouter from "./src/routers/orderRouter.js";
+import customerRouter from "./src/routers/customerRouter.js"
 import { isAuth } from "./src/middlewares/authMiddleware.js";
 import productRotuer from "./src/routers/productRouter.js";
 
 app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/category", isAuth, categoryRouter);
 app.use("/api/v1/payment-method", isAuth, pmRouter);
-app.use("/api/v1/product", isAuth, productRotuer);
+app.use("/api/v1/product", productRotuer);
+app.use("/api/v1/order", orderRouter)
+app.use("/api/v1/customer", customerRouter)
 
 //root url request
 app.use("/", (req, res, next) => {
   const error = {
-    message: "You dont have promission here",
+    message: "You don't have permission here",
   };
   res.json(error);
 });

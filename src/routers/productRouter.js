@@ -146,13 +146,13 @@ router.delete("/", async (req, res, next) => {
 
     deletedCount
       ? res.json({
-          status: "success",
-          message: "Selected products has been deleted.",
-        })
+        status: "success",
+        message: "Selected products has been deleted.",
+      })
       : res.json({
-          status: "erro",
-          message: "Unable to delete the products, please try again later",
-        });
+        status: "erro",
+        message: "Unable to delete the products, please try again later",
+      });
   } catch (error) {
     next(error);
   }

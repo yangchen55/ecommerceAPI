@@ -1,31 +1,34 @@
 // admin api
 
-@url = http://localhost:8000/api/v1
+# @url = http://localhost:8000/api/v1
+# @url = http://ecommerce-env.eba-fm3vjcbd.us-east-1.elasticbeanstalk.com/api/v1
+
+@url= http://localhost:8000/api/v1
 
 
 # Create new admin user
-POST  /admin/register
+POST  {{url}}/admin/register
 Content-Type: application/json
 
 {
 "address": "", 
-"email": "a@sdf.com",
-"fName":"asfasfs",
-"lName": "asdfasdfas",
-"password": "afdasDF@#24",
+"email": "test@gmail.com",
+"fName":"Tsering",
+"lName": "lama",
+"password": "Qq1234",
 "phone": null
 }
 
 
 ### login user
-POST   http://ecommerce-env.eba-fm3vjcbd.us-east-1.elasticbeanstalk.com/api/v1/admin/login
+POST    {{url}}/admin/login
 # POST   {{url}}/admin/login
 Content-Type: application/json
 
 {
 
-"email": "a@a.com",
-"password": "Aa12345"
+"email": "test@gmail.com",
+"password": "Qq1234"
 
 }
 
@@ -52,7 +55,7 @@ Content-Type: application/json
 
 {
 "_id": "63f40b41cdc8e9f473f4d4ee",
- "status": "active",
+"status": "active",
 "name": "Computers"
 }
 
@@ -89,3 +92,18 @@ get http://ecommerce-env.eba-fm3vjcbd.us-east-1.elasticbeanstalk.com/
 
 ###
 GET  http://ecommerce-env.eba-fm3vjcbd.us-east-1.elasticbeanstalk.com/
+
+
+
+
+
+### product
+GET {{url}}/product
+
+
+
+### payments
+GET {{url}}/order
+
+### customers
+GET {{url}}/customer
